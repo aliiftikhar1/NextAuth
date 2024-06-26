@@ -4,19 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
-
 const FormSchema = z.object({
   username: z.string().min(2, {
     message: "Username must be at least 2 characters.",
@@ -25,7 +12,6 @@ const FormSchema = z.object({
     message: "Password must be at least 6 characters.",
   }),
 });
-
 
 export default function FormPage() {
   const form = useForm({
@@ -54,45 +40,47 @@ export default function FormPage() {
       }
       // Process response here
       console.log("Registration Successful", response);
-      toast({ title: "Registration Successful" });
+      alert("Registration Successful");
     } catch (error) {
       console.error("Registration Failed:", error);
-      toast({ title: "Registration Failed", description: error.message });
+      alert(`Registration Failed: ${error.message}`);
     }
   };
 
   return (
-    <Form {...form} className="w-2/3 space-y-6">
+    <div className="w-2/3 mx-auto space-y-6">
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Username</FormLabel>
-              <FormControl>
-                <Input placeholder="Username" {...field} />
-              </FormControl>
-              <FormDescription>
-                This is your public display name.
-              </FormDescription>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input placeholder="Password" {...field} type="password" />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        <Button type="submit">Submit</Button>
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">
+            Username
+          </label>
+          <input
+            {...form.register("username")}
+            placeholder="Username"
+            className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
+          <p className="text-sm text-gray-500">
+            This is your public display name.
+          </p>
+        </div>
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">
+            Password
+          </label>
+          <input
+            {...form.register("password")}
+            type="password"
+            placeholder="Password"
+            className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
+        </div>
+        <button
+          type="submit"
+          className="px-4 py-2 font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+        >
+          Submit
+        </button>
       </form>
-    </Form>
+    </div>
   );
 }
